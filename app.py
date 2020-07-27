@@ -7,7 +7,7 @@ GPIO.setmode(GPIO.BOARD)
 lights = {
     "gardenleft": 37,
     "gardenright": 35,
-    "tree": None
+    "tree": 33
 }
 
 for _, pin in lights.items():
