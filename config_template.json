@@ -1,0 +1,37 @@
+{
+    "bridge": {
+    },
+    "accessories": [
+        {
+            "accessory": "HTTP-SWITCH",
+            "name": "Left Garden Light",
+            "switchType": "stateful",
+            "onUrl": "http://localhost:5000/on/gardenleft",
+            "offUrl": "http://localhost:5000/off/gardenleft",
+            "statusUrl": "http://localhost:5000/status/gardenleft"
+        },
+        {
+            "accessory": "HTTP-SWITCH",
+            "name": "Right Garden Light",
+            "switchType": "stateful",
+            "onUrl": "http://localhost:5000/on/gardenright",
+            "offUrl": "http://localhost:5000/off/gardenright",
+            "statusUrl": "http://localhost:5000/status/gardenright"
+        },
+        {
+            "accessory": "HTTP-SWITCH",
+            "name": "Tree Light",
+            "switchType": "stateful",
+            "onUrl": "http://localhost:5000/on/tree",
+            "offUrl": "http://localhost:5000/off/tree",
+            "statusUrl": "http://localhost:5000/status/tree"
+        }
+    ],
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8581,
+            "platform": "config"
+        }
+    ]
+}
