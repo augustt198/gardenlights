@@ -1,8 +1,14 @@
 from flask import Flask
+from multiprocessing import Process
+import time, datetime
+from Sun import Sun
+
 app = Flask(__name__)
 
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
+
+app = Flask(__name__)
 
 lights = {
     "gardenleft": 37,
@@ -48,4 +54,38 @@ def setoff(light):
     if pin:
         GPIO.output(pin, True)
     return "ok"
+
+SUNSET_DELAY = 0.5
+SUNRISE_DELAY = 3
+
+def timingloop():
+    coords = {'latitude': 41, 'longitude': -72}
+    sun = Sun()
+    didsunset = False
+    didsunrise = False
+    while True:
+        sunrise = sun.getSunriseTime(coords)
+        sunset = sun.getSunsetTime(coords)
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
+        hourdec = now.hour + now.minute/60
+
+        sr = (hourdec + SUNRISE_DELAY)%24 > sunrise['decimal']
+        if sr and not didsunrise:
+            for light in lights.keys():
+                setoff(light)
+        
+        ss = hourdec > (sunset['decimal'] + SUNSET_DELAY)%24
+        if ss and not didsunset:
+            for light in lights.keys():
+                seton(light)
+
+        didsunset, didsunrise = ss, sr
+
+        time.sleep(10)
+
+if __name__ == "__main__":
+    p = Process(target=timingloop)
+    p.start()
+    app.run(debug=True, use_reloader=False)
+    p.join()
 
