@@ -55,8 +55,8 @@ def setoff(light):
         GPIO.output(pin, True)
     return "ok"
 
-SUNSET_DELAY = 0.5
-SUNRISE_DELAY = 3
+SUNSET_DELAY = 0.5 # half hour after sunset
+SUNRISE_DELAY = 3 # three hours before sunrise
 
 def timingloop():
     coords = {'latitude': 41, 'longitude': -72}
@@ -67,14 +67,14 @@ def timingloop():
         sunrise = sun.getSunriseTime(coords)
         sunset = sun.getSunsetTime(coords)
         now = datetime.datetime.now(tz=datetime.timezone.utc)
-        hourdec = now.hour + now.minute/60
+        hourdec = now.hour + now.minute / 60
 
-        sr = (hourdec + SUNRISE_DELAY)%24 > sunrise['decimal']
+        sr = (hourdec + SUNRISE_DELAY) % 24 > sunrise['decimal']
         if sr and not didsunrise:
             for light in lights.keys():
                 setoff(light)
         
-        ss = hourdec > (sunset['decimal'] + SUNSET_DELAY)%24
+        ss = hourdec > (sunset['decimal'] + SUNSET_DELAY) % 24
         if ss and not didsunset:
             for light in lights.keys():
                 seton(light)
